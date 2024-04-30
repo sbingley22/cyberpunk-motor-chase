@@ -1,9 +1,93 @@
+/* eslint-disable react/prop-types */
+import { KeyboardControls, PerspectiveCamera, View } from "@react-three/drei"
+import { Canvas } from "@react-three/fiber"
+import Scene from "./Scene"
+import { Suspense, useRef } from "react"
 
 
-const Game = () => {
+const Game = ({ isMobile, setMode, runners, setMissionScore, difficulty, wordList }) => {
+  const cam1 = useRef()
+  const cam2 = useRef()
+
+  const frontClick = useRef(0)
+
+  const handleViewFrontClickDown = (e) => {
+    const boundingRect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - boundingRect.left) / boundingRect.width;
+    //const y = (e.clientY - boundingRect.top) / boundingRect.height;
+
+    if (x < 0.5) frontClick.current = -1
+    else frontClick.current = 1
+    //console.log('Clicked at:', { x, y });
+  }
+
+  const handleViewFrontClickUp = () => {
+    frontClick.current = 0
+  }
+
+  const handleViewBackClickDown = () => {
+
+  }
+  const handleViewBackClickUp = () => {
+    
+  }
+  
   return (
-    <div>
-      
+    <div className="container">
+      <KeyboardControls
+        map={[
+        { name: "gas", keys: ["ArrowUp"] },
+        { name: "brakes", keys: ["ArrowDown"] },
+        { name: "left", keys: ["ArrowLeft"] },
+        { name: "right", keys: ["ArrowRight"] },
+        { name: "aKey", keys: ["a", "A"] },
+        { name: "dKey", keys: ["d", "D"] },
+        { name: "clutch", keys: ["Space"] },
+        { name: "engine", keys: ["Tab", "Enter"] },
+        ]}
+      >
+        <Suspense fallback={<div>Loading...</div>}>
+          <Canvas 
+            className="canvas"
+            shadows
+            dpr={isMobile ? 0.3 : 2}
+          >
+            <View.Port />
+          </Canvas>
+          <View
+            onPointerDown={handleViewFrontClickDown}
+            onPointerUp={handleViewFrontClickUp}
+          >
+            <PerspectiveCamera ref={cam1} name="frontCam" makeDefault position={[0,2,-2.5]} fov={95} />
+            <Scene 
+              isMobile={isMobile} 
+              cam={cam1}
+              setMode={setMode}
+              runners={runners}
+              setMissionScore={setMissionScore}
+              difficulty={difficulty}
+              wordList={wordList}
+              frontClick={frontClick}
+            />
+          </View>
+          <View 
+            onPointerDown={handleViewBackClickDown}
+            onPointerUp={handleViewBackClickUp}
+          >
+            <PerspectiveCamera ref={cam2} name="rearCam" makeDefault position={[0,2,2.5]} fov={55} />
+            <Scene 
+              isMobile={isMobile} 
+              cam={cam2}
+              setMode={setMode}
+              runners={runners}
+              setMissionScore={setMissionScore}
+              difficulty={difficulty}
+              wordList={wordList}
+              frontClick={frontClick}
+            />
+          </View>
+        </Suspense>
+      </KeyboardControls>
     </div>
   )
 }

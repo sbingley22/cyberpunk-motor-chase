@@ -1,9 +1,88 @@
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
+import MainMenu from './components/MainMenu'
+import Game from './components/Game'
 
 function App() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 768px)')
+    setIsMobile(mediaQuery.matches)
+
+    const handleResize = () => {
+      setIsMobile(mediaQuery.matches)
+    }
+
+    mediaQuery.addEventListener('change', handleResize);
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleResize);
+    }
+  }, [])
+
+  const [mode, setMode] = useState(0)
+  const [song, setSong] = useState(0)
+  const [runners, setRunners] = useState(0)
+  const [missionScore, setMissionScore] = useState(0)
+  const [difficulty, setDifficulty] = useState(1)  
+  const [wordList, setWordList] = useState(0)
+  
+  const songYourHouseRef = useRef(null)
+  const resistDisorderRef = useRef(null)
+  const rebelPathRef = useRef(null)
+
+  // Start Song
+  useEffect(()=>{
+    songYourHouseRef.current.currentTime = 0
+    songYourHouseRef.current.pause()
+    resistDisorderRef.current.currentTime = 0
+    resistDisorderRef.current.pause()
+    rebelPathRef.currentcurrentTime = 0
+    rebelPathRef.current.pause()
+
+    if (song == 0) return
+    if (song == 1) songYourHouseRef.current.play()
+    else if (song == 2) resistDisorderRef.current.play()
+    else if (song == 3) rebelPathRef.current.play()
+  }, [song])
 
   return (
     <>
+      { mode == 0 && 
+        <MainMenu 
+          setMode={setMode}
+          song={song}
+          setSong={setSong}
+          runners={runners}
+          setRunners={setRunners}
+          missionScore={missionScore}
+          setMissionScore={setMissionScore}
+          difficulty={difficulty}
+          setDifficulty={setDifficulty}
+          wordList={wordList}
+          setWordList={setWordList}
+        />
+      }
+      { mode == 1 && 
+        <Game 
+          setMode={setMode}
+          runners={runners}
+          setMissionScore={setMissionScore}
+          difficulty={difficulty}
+          wordList={wordList}
+        />
+      }
+      
+
+      <audio ref={songYourHouseRef} loop>
+        <source src="./audio/yourHouse.m4a" type="audio/mp4" />
+      </audio>
+      <audio ref={rebelPathRef} loop>
+        <source src="./audio/rebelPath.m4a" type="audio/mp4" />
+      </audio>
+      <audio ref={resistDisorderRef} loop>
+        <source src="./audio/resistDisorder.m4a" type="audio/mp4" />
+      </audio>
     </>
   )
 }
