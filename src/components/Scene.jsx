@@ -5,21 +5,15 @@ import { Environment } from "@react-three/drei"
 
 
 const Scene = ({ isMobile, cam, setMode, runners, setMissionScore, difficulty, wordList, frontClick }) => {
-
-  const audioGunshot = useRef(null)
-  const audioPlayerHit = useRef(null)
-  const audioEnemyHit = useRef(null)
-  const audioReload = useRef(null)
-  const audioShieldHit = useRef(null)
-  const audioKill = useRef(null)
   
   useEffect(() => {
     cam.current.lookAt(0, 2, 0)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   
   return (
     <>
-      <Environment preset="city" />
+      <Environment preset="night" background={true} blur={0.5} environmentIntensity={1} />
       <Player
         runners={runners}
         cam={cam}

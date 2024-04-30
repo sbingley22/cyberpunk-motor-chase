@@ -25,7 +25,7 @@ function App() {
   const [runners, setRunners] = useState(0)
   const [missionScore, setMissionScore] = useState(0)
   const [difficulty, setDifficulty] = useState(1)  
-  const [wordList, setWordList] = useState(0)
+  const [wordList, setWordList] = useState(-1)
   
   const songYourHouseRef = useRef(null)
   const resistDisorderRef = useRef(null)
@@ -50,6 +50,7 @@ function App() {
     <>
       { mode == 0 && 
         <MainMenu 
+          isMobile={isMobile}
           setMode={setMode}
           song={song}
           setSong={setSong}
@@ -65,6 +66,7 @@ function App() {
       }
       { mode == 1 && 
         <Game 
+          isMobile={isMobile}
           setMode={setMode}
           runners={runners}
           setMissionScore={setMissionScore}

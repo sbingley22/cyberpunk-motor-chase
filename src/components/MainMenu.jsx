@@ -1,14 +1,17 @@
 /* eslint-disable react/prop-types */
 
-const MainMenu = ({ setMode, song, setSong, runners, setRunners, difficulty, setDifficulty, wordList, setWordList }) => {
+const MainMenu = ({ isMobile, setMode, song, setSong, runners, setRunners, difficulty, setDifficulty, wordList, setWordList }) => {
   const menuStyle = {
     boxSizing: "border-box",
-    display: "grid",
-    gridTemplateColumns: "1fr 3fr 1fr",
+    display: isMobile ? "block" : "grid",
+    gridTemplateColumns: isMobile ? "1fr" : "1fr 3fr 1fr",
+    gridTemplateRows: isMobile ? "1fr" : "1fr",
     padding: "10px",
+    width: "100vw",
     height: "100vh",
     backgroundImage: "url(./stills/menuStill.png)",
-    userSelect: "none"
+    userSelect: "none",
+    textAlign: isMobile ? "left" : "center"
   }
 
   const handleSongChange = (event) => {
@@ -36,8 +39,8 @@ const MainMenu = ({ setMode, song, setSong, runners, setRunners, difficulty, set
         <button 
           onClick={()=>setMode(1)}
           style={{
-            marginTop: "5vh",
-            fontSize: "x-large"
+            marginTop: isMobile ? "1vh" : "5vh",
+            fontSize: isMobile ? "small" : "x-large"
           }}
         >
           Play
@@ -96,8 +99,12 @@ const MainMenu = ({ setMode, song, setSong, runners, setRunners, difficulty, set
           </label>
         </div>
         
-        <div>
+        { !isMobile && <div>
           <h5>Word List:</h5>
+          <label>
+            <input type="radio" value={-1} checked={wordList === -1} onChange={handleWordsChange} />
+            None
+          </label>
           <label>
             <input type="radio" value={0} checked={wordList === 0} onChange={handleWordsChange} />
             Cyberpunk
@@ -110,7 +117,7 @@ const MainMenu = ({ setMode, song, setSong, runners, setRunners, difficulty, set
             <input type="radio" value={2} checked={wordList === 2} onChange={handleWordsChange} />
             Left Handed
           </label>
-        </div>
+        </div>}
       </div>
     </div>
   )
