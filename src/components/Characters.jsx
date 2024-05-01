@@ -2,7 +2,7 @@
 /* eslint-disable react/no-unknown-property */
 import { useAnimations, useGLTF } from '@react-three/drei'
 import { useSkinnedMeshClone } from './SkinnedMeshClone'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import gltfFile from '../assets/Players.glb?url'
 import { useFrame } from '@react-three/fiber'
 
@@ -52,6 +52,7 @@ const Characters = ({ character, altSkin=false, anim, lastAnim }) => {
 
   // eslint-disable-next-line no-unused-vars
   useFrame((state, delta) => {
+
     const updateAnimations = () => {
       //console.log(anim.current, lastAnim.current)
 

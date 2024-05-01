@@ -4,7 +4,7 @@ import Characters from "./Characters"
 import { useFrame } from "@react-three/fiber"
 import { useKeyboardControls } from "@react-three/drei"
 
-const Player = ({ runners, altSkin, cam, frontClick }) => {
+const Player = ({ runners, altSkin, cam, frontClick, timer }) => {
   const groupRef = useRef()
   const anim = useRef("driving")
   const lastAnim = useRef("drivingLeft")

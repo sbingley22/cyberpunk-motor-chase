@@ -6,9 +6,11 @@ import { Environment } from "@react-three/drei"
 import Props from "./Props"
 import Road from "./Road"
 import Drones from "./Drones"
+import { useFrame } from "@react-three/fiber"
 
 const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore, difficulty, wordList, frontClick }) => {
   const speed = useRef(25)
+  const timer = useRef(0)
   
   // Set cam look at
   useEffect(() => {
@@ -16,6 +18,10 @@ const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+  
+  useFrame((state, delta) => {
+    timer.current += delta
+  })
   
   return (
     <>
@@ -46,6 +52,7 @@ const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore
         altSkin={altSkin}
         cam={cam}
         frontClick={frontClick}
+        timer={timer}
       />
 
       { name == "front" && <>
@@ -53,7 +60,9 @@ const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore
       </>}
 
       { name == "rear" && <>
-        <Drones />
+        <Drones
+          timer={timer} 
+        />
       </>}
     </>
   )
