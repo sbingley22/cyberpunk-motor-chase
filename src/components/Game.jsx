@@ -5,7 +5,7 @@ import Scene from "./Scene"
 import { Suspense, useRef } from "react"
 
 
-const Game = ({ isMobile, setMode, runners, setMissionScore, difficulty, wordList }) => {
+const Game = ({ isMobile, setMode, runners, altSkin, setMissionScore, difficulty, wordList }) => {
   const cam1 = useRef()
   const cam2 = useRef()
 
@@ -71,12 +71,14 @@ const Game = ({ isMobile, setMode, runners, setMissionScore, difficulty, wordLis
             onPointerDown={handleViewFrontClickDown}
             onPointerUp={handleViewFrontClickUp}
           >
-            <PerspectiveCamera ref={cam1} name="frontCam" makeDefault position={[0,2,-2.5]} fov={95} />
+            <PerspectiveCamera ref={cam1} name="frontCam" makeDefault position={[0,2,-2.5]} fov={110} />
             <Scene 
-              isMobile={isMobile} 
+              isMobile={isMobile}
+              name={"front"}
               cam={cam1}
               setMode={setMode}
               runners={runners}
+              altSkin={altSkin}
               setMissionScore={setMissionScore}
               difficulty={difficulty}
               wordList={wordList}
@@ -90,6 +92,7 @@ const Game = ({ isMobile, setMode, runners, setMissionScore, difficulty, wordLis
             <PerspectiveCamera ref={cam2} name="rearCam" makeDefault position={[0,2,2.5]} fov={55} />
             <Scene 
               isMobile={isMobile} 
+              name={"rear"}
               cam={cam2}
               setMode={setMode}
               runners={runners}

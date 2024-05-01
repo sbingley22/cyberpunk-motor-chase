@@ -23,6 +23,8 @@ function App() {
   const [mode, setMode] = useState(0)
   const [song, setSong] = useState(0)
   const [runners, setRunners] = useState(0)
+  // eslint-disable-next-line no-unused-vars
+  const [altSkin, setAltSkin] = useState(false)
   const [missionScore, setMissionScore] = useState(0)
   const [difficulty, setDifficulty] = useState(1)  
   const [wordList, setWordList] = useState(-1)
@@ -33,11 +35,15 @@ function App() {
 
   // Start Song
   useEffect(()=>{
+    const volume = 0.4
     songYourHouseRef.current.currentTime = 0
+    songYourHouseRef.current.volume = volume
     songYourHouseRef.current.pause()
     resistDisorderRef.current.currentTime = 0
+    resistDisorderRef.current.volume = volume
     resistDisorderRef.current.pause()
-    rebelPathRef.currentcurrentTime = 0
+    rebelPathRef.current.currentTime = 0
+    rebelPathRef.current.volume = volume
     rebelPathRef.current.pause()
 
     if (song == 0) return
@@ -69,6 +75,7 @@ function App() {
           isMobile={isMobile}
           setMode={setMode}
           runners={runners}
+          altSkin={altSkin}
           setMissionScore={setMissionScore}
           difficulty={difficulty}
           wordList={wordList}

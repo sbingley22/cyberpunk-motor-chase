@@ -14,13 +14,13 @@ const characterNodes = [
   ["AnaGen", "CyberHiTops", "CyberCannon", "Cube003", "Cube003_1", "CyberArms", "MotorCycle", "JacketRebbecaShort", "PigTails"]
 ]
 
-const Characters = ({ character, anim, lastAnim }) => {
+const Characters = ({ character, altSkin=false, anim, lastAnim }) => {
   const { scene, nodes, animations } = useSkinnedMeshClone(gltfFile)
   const { actions, mixer } = useAnimations(animations, scene)
 
   // Character Setup
   useEffect(()=>{
-    console.log(nodes)
+    //console.log(nodes)
     Object.keys(nodes).forEach(nodeKey => {
       const node = nodes[nodeKey]
       if (node.type == "SkinnedMesh") {
@@ -31,7 +31,10 @@ const Characters = ({ character, anim, lastAnim }) => {
     })
 
     let char = character
-    char = 3
+    if (altSkin) {
+      if (char == 1) char += 2
+      else if (char == 2) char += 2
+    }
     characterNodes[char].forEach((nodeName) => {
       const node = nodes[nodeName]
       node.visible = true

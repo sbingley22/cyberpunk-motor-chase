@@ -4,7 +4,7 @@ import Characters from "./Characters"
 import { useFrame } from "@react-three/fiber"
 import { useKeyboardControls } from "@react-three/drei"
 
-const Player = ({ runners, cam, frontClick }) => {
+const Player = ({ runners, altSkin, cam, frontClick }) => {
   const groupRef = useRef()
   const anim = useRef("driving")
   const lastAnim = useRef("drivingLeft")
@@ -31,7 +31,7 @@ const Player = ({ runners, cam, frontClick }) => {
       else if (frontClick.current == 1) steerRight = true
 
       const turnSpeed = 4
-      const roadWidth = 2.0
+      const roadWidth = 2.5
       if (steerLeft) {
         groupRef.current.position.x += turnSpeed * delta
         if (groupRef.current.position.x > roadWidth) groupRef.current.position.x = roadWidth
@@ -60,7 +60,7 @@ const Player = ({ runners, cam, frontClick }) => {
   return (
     <>
       <group ref={groupRef}>
-        <Characters character={runners} anim={anim} lastAnim={lastAnim} />
+        <Characters character={runners} altSkin={altSkin} anim={anim} lastAnim={lastAnim} />
       </group>
     </>
   )
