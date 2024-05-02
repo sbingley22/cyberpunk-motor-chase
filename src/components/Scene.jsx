@@ -8,7 +8,7 @@ import Road from "./Road"
 import Drones from "./Drones"
 import { useFrame } from "@react-three/fiber"
 
-const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore, difficulty, wordList, frontClick }) => {
+const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore, difficulty, wordList, frontClick, backClick }) => {
   const speed = useRef(25)
   const timer = useRef(0)
   

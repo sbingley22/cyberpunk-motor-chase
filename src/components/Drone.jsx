@@ -18,6 +18,7 @@ const Drone = ({ index }) => {
 
   const handleClick = () => {
     console.log(name)
+    coneRef.current["material-color"] = "green"
   }
 
   // eslint-disable-next-line no-unused-vars

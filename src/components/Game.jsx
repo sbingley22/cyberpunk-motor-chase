@@ -10,6 +10,7 @@ const Game = ({ isMobile, setMode, runners, altSkin, setMissionScore, difficulty
   const cam2 = useRef()
 
   const frontClick = useRef(0)
+  const backClick = useRef(0)
 
   const audioGunshot = useRef(null)
   const audioPlayerHit = useRef(null)
@@ -34,11 +35,15 @@ const Game = ({ isMobile, setMode, runners, altSkin, setMissionScore, difficulty
     frontClick.current = 0
   }
 
-  const handleViewBackClickDown = () => {
+  const handleViewBackClickDown = (e) => {
+    const boundingRect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - boundingRect.left) / boundingRect.width;
+    const y = (e.clientY - boundingRect.top) / boundingRect.height;
 
+    backClick.current = [x,y]
   }
   const handleViewBackClickUp = () => {
-    
+    backClick.current = [-1,-1]
   }
   
   return (
@@ -83,6 +88,7 @@ const Game = ({ isMobile, setMode, runners, altSkin, setMissionScore, difficulty
               difficulty={difficulty}
               wordList={wordList}
               frontClick={frontClick}
+              backClick={backClick}
             />
           </View>
           <View 
@@ -100,6 +106,7 @@ const Game = ({ isMobile, setMode, runners, altSkin, setMissionScore, difficulty
               difficulty={difficulty}
               wordList={wordList}
               frontClick={frontClick}
+              backClick={backClick}
             />
           </View>
         </Suspense>
