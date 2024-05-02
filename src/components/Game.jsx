@@ -76,7 +76,7 @@ const Game = ({ isMobile, setMode, runners, altSkin, setMissionScore, difficulty
             onPointerDown={handleViewFrontClickDown}
             onPointerUp={handleViewFrontClickUp}
           >
-            <PerspectiveCamera ref={cam1} name="frontCam" makeDefault position={[0,2,-2.5]} fov={110} />
+            <PerspectiveCamera ref={cam1} name="frontCam" makeDefault position={[0,2,-2.5]} fov={90} />
             <Scene 
               isMobile={isMobile}
               name={"front"}
@@ -95,7 +95,7 @@ const Game = ({ isMobile, setMode, runners, altSkin, setMissionScore, difficulty
             onPointerDown={handleViewBackClickDown}
             onPointerUp={handleViewBackClickUp}
           >
-            <PerspectiveCamera ref={cam2} name="rearCam" makeDefault position={[0,2,2.5]} fov={55} />
+            <PerspectiveCamera ref={cam2} name="rearCam" makeDefault position={[0,3,5.5]} fov={60} />
             <Scene 
               isMobile={isMobile} 
               name={"rear"}

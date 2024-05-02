@@ -2,7 +2,7 @@
 /* eslint-disable react/no-unknown-property */
 import { useAnimations, useGLTF } from '@react-three/drei'
 import { useSkinnedMeshClone } from './SkinnedMeshClone'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import gltfFile from '../assets/Players.glb?url'
 import { useFrame } from '@react-three/fiber'
 

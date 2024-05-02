@@ -2,15 +2,32 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useRef } from "react"
 import Player from "./Player"
-import { Environment } from "@react-three/drei"
-import Props from "./Props"
+import { Environment, Html } from "@react-three/drei"
 import Road from "./Road"
 import Drones from "./Drones"
 import { useFrame } from "@react-three/fiber"
 
+const droneAmount = 5
+
+const findNodeByName = (parent, name) => {
+  if (parent.name === name) {
+    return parent
+  }
+  for (const child of parent.children) {
+    const found = findNodeByName(child, name)
+    if (found) {
+      return found
+    }
+  }
+  return null
+}
+
 const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore, difficulty, wordList, frontClick, backClick }) => {
   const speed = useRef(25)
   const timer = useRef(0)
+  
+  const target = useRef(null)
+  const drones = useRef(null)
   
   // Set cam look at
   useEffect(() => {
@@ -20,7 +37,51 @@ const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore
   }, [])
   
   useFrame((state, delta) => {
+    if (drones.current == null) {
+      const tempDrones = []
+      for (let i = 0; i < droneAmount; i++) {
+        const node = findNodeByName(state.scene, 'enemy-drone-'+i)
+        tempDrones.push(node)
+      }
+      if (tempDrones.length == 5) {
+        drones.current = tempDrones
+      }
+      return
+    }
+
     timer.current += delta
+
+    if (name == "rear") {
+      if (backClick.current[0] != -1) {
+        //console.log("Clicked back view at: ", backClick.current)
+        const bcX = backClick.current[0]
+        const bcY = backClick.current[1]
+        let clickX = -1
+        let clickY = -1
+
+        if (bcX < 0.33) clickX = 1
+        else if (bcX < 0.67) clickX = 2
+        else clickX = 3
+        if (bcY < 0.12) clickY = 1
+        else if (bcY < 0.24) clickY = 2
+        else if (bcY < 0.3) clickY = 3
+        else if (bcY < 0.8) clickY = 4
+        else clickY = 5
+
+        if (clickY < 4) {
+          drones.current.forEach( (drone) => {
+            if (drone.clickX == clickX && drone.clickY == clickY) {
+              if (drone.health <= 0) return
+              target.current = drone.name
+              //console.log("Target: " + drone.name)
+              //console.log("Click X/Y: ", clickX, clickY)
+            }
+          } )
+        }
+        
+        backClick.current = [-1,-1]
+      }
+    }
   })
   
   return (
@@ -53,6 +114,7 @@ const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore
         cam={cam}
         frontClick={frontClick}
         timer={timer}
+        target={target}
       />
 
       { name == "front" && <>
@@ -61,7 +123,8 @@ const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore
 
       { name == "rear" && <>
         <Drones
-          timer={timer} 
+          timer={timer}
+          target={target}
         />
       </>}
     </>

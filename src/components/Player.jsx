@@ -1,14 +1,17 @@
+/* eslint-disable react/no-unknown-property */
 /* eslint-disable react/prop-types */
 import { useRef } from "react"
 import Characters from "./Characters"
 import { useFrame } from "@react-three/fiber"
-import { useKeyboardControls } from "@react-three/drei"
+import { Html, useKeyboardControls } from "@react-three/drei"
 
-const Player = ({ runners, altSkin, cam, frontClick, timer }) => {
+const Player = ({ runners, altSkin, cam, frontClick, timer, target }) => {
   const groupRef = useRef()
   const anim = useRef("driving")
   const lastAnim = useRef("drivingLeft")
   const [, getKeys] = useKeyboardControls()
+  
+  const hullDmgRef = useRef()
 
   const newAnimation = (newAnim) => {
     anim.current = newAnim
@@ -48,19 +51,45 @@ const Player = ({ runners, altSkin, cam, frontClick, timer }) => {
     }
     steering()
 
+    const shooting = () => {
+      if (target.current) {
+        newAnimation("shooting")
+      }
+    }
+    shooting()
+
     const updateCam = () => {
       if (!cam.current.name) return
-      if (cam.current.name == "rearCam") {
-        cam.current.position.x = groupRef.current.position.x
+      if (cam.current.name == "frontCam") {
+        cam.current.position.x = groupRef.current.position.x * 0.5
+      }
+      else if (cam.current.name == "rearCam") {
+        cam.current.position.x = groupRef.current.position.x * 0.05
       }
     }
     updateCam()
+
+    const updateHud = () => {
+      if (!hullDmgRef.current) return
+      if (!groupRef.current) return
+
+      if (cam.current.name == "frontCam") hullDmgRef.current.innerHTML = "Hull: " + groupRef.current.hull
+    }
+    updateHud()
+
   })
 
   return (
     <>
-      <group ref={groupRef}>
+      <group 
+        ref={groupRef}
+        shield={100}
+        hull={100}
+      >
         <Characters character={runners} altSkin={altSkin} anim={anim} lastAnim={lastAnim} />
+        <Html>
+          <p ref={hullDmgRef}></p>
+        </Html>
       </group>
     </>
   )
