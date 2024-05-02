@@ -3,9 +3,11 @@
 import { useRef } from "react"
 import Props from "./Props"
 import { useFrame } from "@react-three/fiber"
+import { Cone } from "@react-three/drei"
 
 const Drone = ({ index }) => {
   const ref = useRef()
+  const coneRef = useRef()
   const name = "enemy-drone-"+index
   const zRotation = useRef(0)
   const swayDirection = useRef(1)
@@ -48,6 +50,13 @@ const Drone = ({ index }) => {
       onClick={handleClick}
     >
       <Props name={droneModel} rotation={[Math.PI/2, 0, Math.PI/2]} />
+      <Cone
+        ref={coneRef}
+        args={[.1, 0.3, 3]} // radius, height, segments
+        position={[0, .4, 0]}
+        rotation={[0, 0, Math.PI]}
+        material-color={"red"}
+      />
     </group>
   )
 }
