@@ -50,12 +50,30 @@ const Characters = ({ character, altSkin=false, anim, lastAnim }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodes])
 
+  // Mixer
+  useEffect(()=>{
+    actions["hurt"].repetitions = 1
+    actions["hurt"].clampWhenFinished = false
+    actions["drivingHurt"].repetitions = 1
+    actions["drivingHurt"].clampWhenFinished = true
+    actions["shootingHurt"].repetitions = 1
+    actions["shootingHurt"].clampWhenFinished = true
+
+    mixer.addEventListener('finished', () => {
+      if (anim.current == "shootingHurt") anim.current = "aiming"
+      else if (anim.current == "drivingHurt") anim.current = "aiming"
+    })
+
+    return () => {
+      mixer.removeEventListener('finished')
+    }
+  }, [mixer, actions, anim])
+
   // eslint-disable-next-line no-unused-vars
   useFrame((state, delta) => {
 
     const updateAnimations = () => {
       //console.log(anim.current, lastAnim.current)
-
       if (lastAnim.current == anim.current) return
 
       actions[lastAnim.current].fadeOut(0.1)
@@ -64,6 +82,7 @@ const Characters = ({ character, altSkin=false, anim, lastAnim }) => {
       lastAnim.current = anim.current
     }
     updateAnimations()
+    
   })
 
   return (

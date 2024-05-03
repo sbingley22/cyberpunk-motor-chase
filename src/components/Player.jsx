@@ -3,15 +3,19 @@
 import { useRef } from "react"
 import Characters from "./Characters"
 import { useFrame } from "@react-three/fiber"
-import { Html, useKeyboardControls } from "@react-three/drei"
+import { Html, Plane, useKeyboardControls } from "@react-three/drei"
 
-const Player = ({ runners, altSkin, cam, frontClick, timer, target }) => {
+const Player = ({ runners, altSkin, cam, frontClick, timer, target, setMode, setMissionScore }) => {
   const groupRef = useRef()
   const anim = useRef("driving")
   const lastAnim = useRef("drivingLeft")
   const [, getKeys] = useKeyboardControls()
   
   const hullDmgRef = useRef()
+  const shieldPlaneRef = useRef()
+  const prevShield = useRef(100)
+  const roadPlaneRef = useRef()
+  const roadTime = useRef(0)
 
   const newAnimation = (newAnim) => {
     anim.current = newAnim
@@ -69,13 +73,46 @@ const Player = ({ runners, altSkin, cam, frontClick, timer, target }) => {
     }
     updateCam()
 
+    const gameOver = (win=false) => {
+      let score = 0
+      if (win) score += 200
+      score += groupRef.current.shield
+      score += groupRef.current.hull
+
+      setMissionScore(score)
+      setMode(9)
+    }
+
     const updateHud = () => {
       if (!hullDmgRef.current) return
+      if (!shieldPlaneRef.current) return
+      if (!roadPlaneRef.current) return
       if (!groupRef.current) return
 
-      if (cam.current.name == "frontCam") hullDmgRef.current.innerHTML = "Hull: " + groupRef.current.hull
+      if (groupRef.current.shield < 0) {
+        groupRef.current.shield = 0
+        gameOver()
+      }
+
+      if (cam.current.name == "frontCam") hullDmgRef.current.innerHTML = groupRef.current.hull + "/9"
+      if (cam.current.name == "rearCam") shieldPlaneRef.current.scale.x = groupRef.current.shield * .03
+
+      roadTime.current += delta
+      roadPlaneRef.current.scale.x = ( roadTime.current / 180 ) * 2
+      if (roadTime.current >= 180) {
+        gameOver(true)
+      }
     }
     updateHud()
+
+    const updateShields = () => {
+      if (prevShield.current != groupRef.current.shield) {
+        prevShield.current = groupRef.current.shield
+
+        anim.current = "shootingHurt"
+      }
+    }
+    updateShields()
 
   })
 
@@ -83,13 +120,46 @@ const Player = ({ runners, altSkin, cam, frontClick, timer, target }) => {
     <>
       <group 
         ref={groupRef}
+        name="player"
         shield={100}
-        hull={100}
+        hull={9}
       >
-        <Characters character={runners} altSkin={altSkin} anim={anim} lastAnim={lastAnim} />
-        <Html>
-          <p ref={hullDmgRef}></p>
+        <Characters 
+          character={runners} 
+          altSkin={altSkin} 
+          anim={anim} 
+          lastAnim={lastAnim} 
+        />
+
+        <Html position={[0, -0.2, 0]}>
+          <p ref={hullDmgRef} style={{fontWeight: "bold"}}></p>
         </Html>
+
+        <Plane 
+          position={[0,0.25,2]}
+          scale={[3,.5,1]}
+          material-color={"#222222"}
+        />
+        <Plane 
+          ref={shieldPlaneRef}
+          position={[0,0.25,2]}
+          scale={[3,.5,1]}
+          material-color={"#222299"}
+        />
+        
+        <Plane 
+          position={[0,0.25,-.7]}
+          scale={[2,.05,1]}
+          rotation={[0, Math.PI, 0]}
+          material-color={"#222222"}
+        />
+        <Plane 
+          ref={roadPlaneRef}
+          position={[0,0.25,-.7]}
+          scale={[0,.05,1]}
+          rotation={[0, Math.PI, 0]}
+          material-color={"#992299"}
+        />
       </group>
     </>
   )

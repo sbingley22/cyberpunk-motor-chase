@@ -5,9 +5,10 @@ import Props from "./Props"
 import { useFrame } from "@react-three/fiber"
 import { Cone } from "@react-three/drei"
 
-const Drone = ({ index, target }) => {
+const Drone = ({ index, target, player }) => {
   const ref = useRef()
   const coneRef = useRef()
+
   const name = "enemy-drone-"+index
   const zRotation = useRef(0)
   const swayDirection = useRef(1)
@@ -83,6 +84,7 @@ const Drone = ({ index, target }) => {
     const shoot = () => {
       if (shooting.current) {
         // shooting
+        player.current.shield -= 1 * delta
 
       } else {
         // Not currently shooting.

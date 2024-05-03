@@ -25,6 +25,7 @@ const Drones = ({ timer, target }) => {
   const group = useRef()
   const drones = useRef(null)
   const wave = useRef(0)
+  const player = useRef()
 
   // eslint-disable-next-line no-unused-vars
   useFrame((state, delta) => {
@@ -38,6 +39,11 @@ const Drones = ({ timer, target }) => {
         drones.current = tempDrones
       }
       //console.log(drones.current)
+      return
+    }
+    if (player.current == null) {
+      const node = findNodeByName(state.scene, "player")
+      if (node) player.current = node
       return
     }
 
@@ -75,6 +81,7 @@ const Drones = ({ timer, target }) => {
           key={"enemy-drone-"+drone}
           index={drone}
           target={target}
+          player={player}
         />
       )) }
     </group>

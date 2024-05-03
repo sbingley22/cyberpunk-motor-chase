@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import MainMenu from './components/MainMenu'
 import Game from './components/Game'
+import GameOver from './components/GameOver';
 
 function App() {
   const [isMobile, setIsMobile] = useState(false);
@@ -79,6 +80,13 @@ function App() {
           setMissionScore={setMissionScore}
           difficulty={difficulty}
           wordList={wordList}
+        />
+      }
+      { mode == 9 &&
+        <GameOver
+          isMobile={isMobile}
+          setMode={setMode}
+          missionScore={missionScore}
         />
       }
       

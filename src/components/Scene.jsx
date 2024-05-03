@@ -115,6 +115,8 @@ const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore
         frontClick={frontClick}
         timer={timer}
         target={target}
+        setMode={setMode}
+        setMissionScore={setMissionScore}
       />
 
       { name == "front" && <>
