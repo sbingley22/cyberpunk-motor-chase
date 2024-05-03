@@ -5,7 +5,7 @@ import Characters from "./Characters"
 import { useFrame } from "@react-three/fiber"
 import { Html, Plane, useKeyboardControls } from "@react-three/drei"
 
-const Player = ({ runners, altSkin, cam, frontClick, timer, target, setMode, setMissionScore, playSound, stopSound }) => {
+const Player = ({ isMobile, runners, altSkin, cam, frontClick, timer, target, setMode, setMissionScore, playSound, stopSound }) => {
   const groupRef = useRef()
   const anim = useRef("driving")
   const lastAnim = useRef("drivingLeft")
@@ -157,13 +157,13 @@ const Player = ({ runners, altSkin, cam, frontClick, timer, target, setMode, set
         </Html>
 
         <Plane 
-          position={[0,0.25,2]}
+          position={isMobile ? [0,0.45,2] : [0,0.25,2]}
           scale={[3,.5,1]}
           material-color={"#222222"}
         />
         <Plane 
           ref={shieldPlaneRef}
-          position={[0,0.25,2.1]}
+          position={isMobile ? [0,0.45,2.1] : [0,0.25,2.1]}
           scale={[3,.5,1]}
           material-color={"#222299"}
         />

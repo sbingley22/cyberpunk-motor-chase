@@ -194,6 +194,7 @@ const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore
       <BackgoundProps speed={speed} />
 
       <Player
+        isMobile={isMobile}
         runners={runners}
         altSkin={altSkin}
         cam={cam}
