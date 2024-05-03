@@ -11,7 +11,9 @@ const characterNodes = [
   ["Ana", "LowTopo_Cube001", "LowTopo_Cube001_1", "MotorCycle", "Pistol", "Parted"],
   ["Ana", "LowTopo_Cube001", "LowTopo_Cube001_1", "CyberHiTops", "CyberCannon", "Cube003", "Cube003_1", "CyberArms", "MotorCycle", "JacketRebbeca", "PigTails"],
   ["AnaGen", "MotorCycle", "Pistol", "Parted"],
-  ["AnaGen", "CyberHiTops", "CyberCannon", "Cube003", "Cube003_1", "CyberArms", "MotorCycle", "JacketRebbecaShort", "PigTails"]
+  ["AnaGen", "CyberHiTops", "CyberCannon", "Cube003", "Cube003_1", "CyberArms", "MotorCycle", "JacketRebbecaShort", "PigTails"],
+  ["MotorCycle", "Merc1", "Pistol"],
+  ["MotorCycle", "Merc2", "Pistol"]
 ]
 
 const Characters = ({ character, altSkin=false, anim, lastAnim }) => {
@@ -73,7 +75,7 @@ const Characters = ({ character, altSkin=false, anim, lastAnim }) => {
   useFrame((state, delta) => {
 
     const updateAnimations = () => {
-      //console.log(anim.current, lastAnim.current)
+      //if (character == 5) console.log(anim.current, lastAnim.current)
       if (lastAnim.current == anim.current) return
 
       actions[lastAnim.current].fadeOut(0.1)

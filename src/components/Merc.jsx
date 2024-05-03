@@ -1,80 +1,26 @@
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable react/prop-types */
-import { useEffect, useRef } from "react"
-import Props from "./Props"
+import { useRef } from "react"
 import { useFrame } from "@react-three/fiber"
 import { Cone } from "@react-three/drei"
+import Characters from "./Characters"
 
-const Drone = ({ index, target, player, playSound, difficulty }) => {
+const Merc = ({ index, target, player, playSound, difficulty }) => {
   const ref = useRef()
   const coneRef = useRef()
 
-  const name = "enemy-drone-"+index
-  const zRotation = useRef(0)
-  const swayDirection = useRef(1)
+  const anim = useRef("driving")
+  const lastAnim = useRef("drivingLeft")
+
+  const name = "enemy-merc-"+index
   const shooting = useRef(false)
 
-  let droneModel = "Drone"
-  if (index % 3 == 1) droneModel += "001"
-  else if (index % 3 == 2) droneModel += "002"
-
-  useEffect(()=>{
-    let startX = -2
-    let startY = 3.0
-    ref.current.clickX = 1
-    ref.current.clickY = 1
-    if (index == 1) {
-      startX = 2
-      startY = 1.5
-      ref.current.clickX = 3
-      ref.current.clickY = 3
-    } else if (index == 2) {
-      startX = 2
-      startY = 3.0
-      ref.current.clickX = 3
-      ref.current.clickY = 1
-    } else if (index == 3) {
-      startX = -2
-      startY = 1.5
-      ref.current.clickX = 1
-      ref.current.clickY = 3
-    } else if (index == 4) {
-      startX = 0
-      startY = 2.25
-      ref.current.clickX = 2
-      ref.current.clickY = 2
-    }
-    
-    ref.current.position.x = startX
-    ref.current.position.y = startY
-    ref.current.position.z = 0
-
-    ref.current.startX = startX
-    ref.current.startY = startY
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  let mercModel = 5
+  if (index == 1) mercModel = 6
 
   // eslint-disable-next-line no-unused-vars
   useFrame((state, delta) => {
     if (ref.current.health == -100) return
-
-    const swayRotation = () => {
-      const sway = swayDirection.current * delta * 0.1
-      zRotation.current += target.current == name ? sway * 10 : sway
-
-      const swayLimit = 0.1
-      if (zRotation.current > swayLimit) {
-        zRotation.current = swayLimit
-        swayDirection.current = -1
-      } else if (zRotation.current < -swayLimit) {
-        zRotation.current = -swayLimit
-        swayDirection.current = 1
-      }
-
-      ref.current.rotation.z = zRotation.current
-    }
-    swayRotation()
 
     const moveForwards = () => {
       if (ref.current.position.z < 0) ref.current.position.z += 4 * delta
@@ -86,9 +32,10 @@ const Drone = ({ index, target, player, playSound, difficulty }) => {
         // shooting
         const dmg = difficulty == 0 ? 0.5 : difficulty == 1 ? 1 : 2
         player.current.shield -= dmg * delta
-
+        anim.current = "shootingForward"
       } else {
         // Not currently shooting.
+        anim.current = "driving"
         const chance = Math.random() / delta
         if (chance < 0.12) {
           shooting.current = true
@@ -107,6 +54,8 @@ const Drone = ({ index, target, player, playSound, difficulty }) => {
       if (health <33) coneRef.current.material.color.set(0.7,0.0,0.0)
       else if (health <66) coneRef.current.material.color.set(0.4,0.4,0.0)
       else coneRef.current.material.color.set(0.0,0.7,0.0)
+
+      anim.current = "drivingHurt"
 
       if (health <= 0) {
         target.current = null
@@ -132,22 +81,26 @@ const Drone = ({ index, target, player, playSound, difficulty }) => {
     }
     if (ref.current.health <= 0) dieing()
 
-    //if (target.current == name) console.log("Targetted!", coneRef.current)
+    //console.log(anim.current, lastAnim.current)
   })
-
-  //console.log(droneModel)
+  
   return (
     <group 
       ref={ref} 
       name={name}
       health={-100}
       visible={false}
+      position-x={index == 0 ? -2.5 : 2.5}
     >
-      <Props name={droneModel} rotation={[Math.PI/2, 0, Math.PI/2]} />
+      <Characters 
+        character={mercModel}
+        anim={anim} 
+        lastAnim={lastAnim} 
+      />
       <Cone
         ref={coneRef}
         args={[.1, 0.3, 3]} // radius, height, segments
-        position={[0, .4, 0]}
+        position={[0, 1.9, 0]}
         rotation={[0, 0, Math.PI]}
         material-color={"grey"}
       />
@@ -155,4 +108,4 @@ const Drone = ({ index, target, player, playSound, difficulty }) => {
   )
 }
 
-export default Drone
+export default Merc

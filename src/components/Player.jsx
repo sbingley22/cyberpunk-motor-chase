@@ -18,6 +18,10 @@ const Player = ({ runners, altSkin, cam, frontClick, timer, target, setMode, set
   const roadTime = useRef(0)
 
   const newAnimation = (newAnim) => {
+    if (anim.current == "hurt") return
+    if (anim.current == "drivingHurt") return
+    if (anim.current == "shootingHurt") return
+
     anim.current = newAnim
   }
 
@@ -81,8 +85,9 @@ const Player = ({ runners, altSkin, cam, frontClick, timer, target, setMode, set
       if (win) score += 200
       score += groupRef.current.shield
       score += groupRef.current.hull * 11
+      score += Math.floor(timer.current)
 
-      setMissionScore(score)
+      setMissionScore(Math.floor(score))
       setMode(9)
     }
 
@@ -112,12 +117,21 @@ const Player = ({ runners, altSkin, cam, frontClick, timer, target, setMode, set
       if (prevShield.current != groupRef.current.shield) {
         prevShield.current = groupRef.current.shield
         playSound("shieldHit")
-        anim.current = "shootingHurt"
+        newAnimation("shootingHurt")
       } else {
         stopSound("shieldHit")
       }
     }
     updateShields()
+
+    const hitRoadBlock = () => {
+      groupRef.current.roadBlockFlag = false
+      newAnimation("drivingHurt")
+      playSound("roadHit")
+      groupRef.current.hull -= 1
+      if (groupRef.current.hull <= 0) gameOver()
+    }
+    if (groupRef.current.roadBlockFlag) hitRoadBlock()
 
   })
 
@@ -128,6 +142,7 @@ const Player = ({ runners, altSkin, cam, frontClick, timer, target, setMode, set
         name="player"
         shield={100}
         hull={9}
+        roadBlockFlag={false}
       >
         <Characters 
           character={runners} 

@@ -7,8 +7,11 @@ import Road from "./Road"
 import Drones from "./Drones"
 import { useFrame } from "@react-three/fiber"
 import BackgoundProps from "./BackgoundProps"
+import RoadBlocks from "./RoadBlocks"
+import Mercs from "./Mercs"
 
 const droneAmount = 5
+const mercAmount = 2
 
 const findNodeByName = (parent, name) => {
   if (parent.name === name) {
@@ -24,11 +27,12 @@ const findNodeByName = (parent, name) => {
 }
 
 const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore, difficulty, wordList, frontClick, backClick }) => {
-  const speed = useRef(25)
+  const speed = useRef(difficulty == 1 ? 35 : difficulty == 2 ? 50 : 25)
   const timer = useRef(0)
   
   const target = useRef(null)
   const drones = useRef(null)
+  const mercs = useRef(null)
 
   const audioGunshot = useRef()
   const audioPlayerHit = useRef()
@@ -67,9 +71,12 @@ const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore
       audioShieldHit.current.playbackRate = 3
     } else if (soundName == "kill") {
       audioKill.current.currentTime = 0
-      //audioKill.current.loop = true
       audioKill.current.play()
       audioKill.current.volume = 1.0
+    } else if (soundName == "roadHit") {
+      audioReload.current.currentTime = 0
+      audioReload.current.play()
+      audioReload.current.volume = 1.0
     }
   }
   // Stop Sound
@@ -105,6 +112,17 @@ const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore
       }
       return
     }
+    if (mercs.current == null) {
+      const tempMercs = []
+      for (let i = 0; i < mercAmount; i++) {
+        const node = findNodeByName(state.scene, 'enemy-merc-'+i)
+        tempMercs.push(node)
+      }
+      if (tempMercs.length == 2) {
+        mercs.current = tempMercs
+      }
+      return
+    }
 
     timer.current += delta
 
@@ -130,10 +148,16 @@ const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore
             if (drone.clickX == clickX && drone.clickY == clickY) {
               if (drone.health <= 0) return
               target.current = drone.name
-              //console.log("Target: " + drone.name)
-              //console.log("Click X/Y: ", clickX, clickY)
             }
           } )
+        } else if (clickY == 4) {
+          //console.log(clickX)
+          mercs.current.forEach( (merc, index) => {
+            if ( (index == 0 && clickX == 1) || (index == 1 && clickX == 3) ) {
+              if (merc.health <= 0) return
+              target.current = merc.name
+            }
+          })
         }
         
         backClick.current = [-1,-1]
@@ -182,7 +206,7 @@ const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore
       />
 
       { name == "front" && <>
-
+        <RoadBlocks speed={speed} />
       </>}
 
       { name == "rear" && <>
@@ -190,6 +214,13 @@ const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore
           timer={timer}
           target={target}
           playSound={playSound}
+          difficulty={difficulty}
+        />
+        <Mercs
+          timer={timer}
+          target={target}
+          playSound={playSound}
+          difficulty={difficulty}
         />
       </>}
 

@@ -25,7 +25,7 @@ function App() {
   const [song, setSong] = useState(0)
   const [runners, setRunners] = useState(0)
   // eslint-disable-next-line no-unused-vars
-  const [altSkin, setAltSkin] = useState(true)
+  const [altSkin, setAltSkin] = useState(false)
   const [missionScore, setMissionScore] = useState(0)
   const [difficulty, setDifficulty] = useState(1)  
   const [wordList, setWordList] = useState(-1)

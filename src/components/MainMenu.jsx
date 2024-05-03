@@ -118,6 +118,14 @@ const MainMenu = ({ isMobile, setMode, song, setSong, runners, setRunners, diffi
             Left Handed
           </label>
         </div>}
+
+        <div>
+          <h5>How to Play:</h5>
+          <p>Get back to your safe house. When the purple bar fills you'll reach there.</p>
+          <p>Don't run into too many obstacles.</p>
+          <p>Stop the enemies from destroying your shields by shooting at them when there target is blue.</p>
+        </div>
+
       </div>
     </div>
   )
