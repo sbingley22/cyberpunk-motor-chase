@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
 
 const MainMenu = ({ isMobile, setMode, song, setSong, runners, setRunners, difficulty, setDifficulty, wordList, setWordList }) => {

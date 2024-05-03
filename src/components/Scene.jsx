@@ -26,6 +26,7 @@ const findNodeByName = (parent, name) => {
   return null
 }
 
+// eslint-disable-next-line no-unused-vars
 const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore, difficulty, wordList, frontClick, backClick }) => {
   const speed = useRef(difficulty == 1 ? 35 : difficulty == 2 ? 50 : 25)
   const timer = useRef(0)

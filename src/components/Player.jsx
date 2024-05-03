@@ -27,6 +27,7 @@ const Player = ({ runners, altSkin, cam, frontClick, timer, target, setMode, set
 
   // eslint-disable-next-line no-unused-vars
   useFrame((state, delta) => {
+    // eslint-disable-next-line no-unused-vars
     const { gas, breaks, clutch, left, right, aKey, dKey, engine } = getKeys()
 
     const steering = () => {

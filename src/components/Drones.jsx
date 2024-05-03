@@ -5,7 +5,7 @@ import Drone from "./Drone"
 import { useRef } from "react"
 
 const droneMap = [0,1,2,3,4]
-const waveTimings = [2, 25, 50, 110, 140]
+const waveTimings = [2, 35, 65, 90, 120]
 
 const findNodeByName = (parent, name) => {
   if (parent.name === name) {

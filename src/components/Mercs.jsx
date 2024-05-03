@@ -5,7 +5,7 @@ import { useRef } from "react"
 import Merc from "./Merc"
 
 const mercMap = [0,1]
-const waveTimings = [2, 35, 56, 120, 150]
+const waveTimings = [10, 45, 75, 100, 125]
 
 const findNodeByName = (parent, name) => {
   if (parent.name === name) {
