@@ -99,7 +99,7 @@ const MainMenu = ({ isMobile, setMode, song, setSong, runners, setRunners, diffi
           </label>
         </div>
         
-        { !isMobile && <div>
+        { !isMobile && false && <div>
           <h5>Word List:</h5>
           <label>
             <input type="radio" value={-1} checked={wordList === -1} onChange={handleWordsChange} />

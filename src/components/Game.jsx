@@ -12,13 +12,6 @@ const Game = ({ isMobile, setMode, runners, altSkin, setMissionScore, difficulty
   const frontClick = useRef(0)
   const backClick = useRef(0)
 
-  const audioGunshot = useRef(null)
-  const audioPlayerHit = useRef(null)
-  const audioEnemyHit = useRef(null)
-  const audioReload = useRef(null)
-  const audioShieldHit = useRef(null)
-  const audioKill = useRef(null)
-
   const handleViewFrontClickDown = (e) => {
     const boundingRect = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX - boundingRect.left) / boundingRect.width;
@@ -112,25 +105,6 @@ const Game = ({ isMobile, setMode, runners, altSkin, setMissionScore, difficulty
         </Suspense>
       </KeyboardControls>
       
-      
-      <audio ref={audioGunshot} >
-        <source src="./audio/gunshot.wav" type="audio/wav" />
-      </audio>
-      <audio ref={audioKill} >
-        <source src="./audio/kill.m4a" type="audio/wav" />
-      </audio>
-      <audio ref={audioPlayerHit} >
-        <source src="./audio/playerHit.wav" type="audio/wav" />
-      </audio>
-      <audio ref={audioEnemyHit} >
-        <source src="./audio/enemyHit.wav" type="audio/wav" />
-      </audio>
-      <audio ref={audioReload} >
-        <source src="./audio/reload.wav" type="audio/wav" />
-      </audio>
-      <audio ref={audioShieldHit} >
-        <source src="./audio/shieldHit.wav" type="audio/wav" />
-      </audio>
     </div>
   )
 }

@@ -5,7 +5,7 @@ import Characters from "./Characters"
 import { useFrame } from "@react-three/fiber"
 import { Html, Plane, useKeyboardControls } from "@react-three/drei"
 
-const Player = ({ runners, altSkin, cam, frontClick, timer, target, setMode, setMissionScore }) => {
+const Player = ({ runners, altSkin, cam, frontClick, timer, target, setMode, setMissionScore, playSound, stopSound }) => {
   const groupRef = useRef()
   const anim = useRef("driving")
   const lastAnim = useRef("drivingLeft")
@@ -58,6 +58,9 @@ const Player = ({ runners, altSkin, cam, frontClick, timer, target, setMode, set
     const shooting = () => {
       if (target.current) {
         newAnimation("shooting")
+        playSound("enemyHit")
+      } else {
+        stopSound("enemyHit")
       }
     }
     shooting()
@@ -77,7 +80,7 @@ const Player = ({ runners, altSkin, cam, frontClick, timer, target, setMode, set
       let score = 0
       if (win) score += 200
       score += groupRef.current.shield
-      score += groupRef.current.hull
+      score += groupRef.current.hull * 11
 
       setMissionScore(score)
       setMode(9)
@@ -108,8 +111,10 @@ const Player = ({ runners, altSkin, cam, frontClick, timer, target, setMode, set
     const updateShields = () => {
       if (prevShield.current != groupRef.current.shield) {
         prevShield.current = groupRef.current.shield
-
+        playSound("shieldHit")
         anim.current = "shootingHurt"
+      } else {
+        stopSound("shieldHit")
       }
     }
     updateShields()
@@ -131,7 +136,7 @@ const Player = ({ runners, altSkin, cam, frontClick, timer, target, setMode, set
           lastAnim={lastAnim} 
         />
 
-        <Html position={[0, -0.2, 0]}>
+        <Html position={[0, -0.05, 0]}>
           <p ref={hullDmgRef} style={{fontWeight: "bold"}}></p>
         </Html>
 
@@ -142,7 +147,7 @@ const Player = ({ runners, altSkin, cam, frontClick, timer, target, setMode, set
         />
         <Plane 
           ref={shieldPlaneRef}
-          position={[0,0.25,2]}
+          position={[0,0.25,2.1]}
           scale={[3,.5,1]}
           material-color={"#222299"}
         />
@@ -155,7 +160,7 @@ const Player = ({ runners, altSkin, cam, frontClick, timer, target, setMode, set
         />
         <Plane 
           ref={roadPlaneRef}
-          position={[0,0.25,-.7]}
+          position={[0,0.25,-.71]}
           scale={[0,.05,1]}
           rotation={[0, Math.PI, 0]}
           material-color={"#992299"}

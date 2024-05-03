@@ -6,6 +6,7 @@ import { Environment, Html } from "@react-three/drei"
 import Road from "./Road"
 import Drones from "./Drones"
 import { useFrame } from "@react-three/fiber"
+import BackgoundProps from "./BackgoundProps"
 
 const droneAmount = 5
 
@@ -28,13 +29,69 @@ const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore
   
   const target = useRef(null)
   const drones = useRef(null)
+
+  const audioGunshot = useRef()
+  const audioPlayerHit = useRef()
+  const audioEnemyHit = useRef()
+  const audioReload = useRef()
+  const audioShieldHit = useRef()
+  const audioKill = useRef()
   
   // Set cam look at
   useEffect(() => {
     cam.current.lookAt(0, 2, 0)
-
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // Play Sound
+  const playSound = (soundName) => {
+    if (!audioGunshot.current) return
+    if (!audioEnemyHit.current) return
+    if (!audioKill.current) return
+    if (!audioPlayerHit.current) return
+    if (!audioReload.current) return
+    if (!audioShieldHit.current) return
+
+    if (soundName == "gunshot") {
+      audioGunshot.current.play()
+      audioGunshot.current.loop = true
+    } else if (soundName == "shieldHit") {
+      audioEnemyHit.current.play()
+      audioEnemyHit.current.loop = true
+      audioEnemyHit.current.volume = 0.6
+      audioEnemyHit.current.playbackRate = 3
+    } else if (soundName == "enemyHit") {
+      audioShieldHit.current.play()
+      audioShieldHit.current.loop = true
+      audioShieldHit.current.volume = 1.0
+      audioShieldHit.current.playbackRate = 3
+    } else if (soundName == "kill") {
+      audioKill.current.currentTime = 0
+      //audioKill.current.loop = true
+      audioKill.current.play()
+      audioKill.current.volume = 1.0
+    }
+  }
+  // Stop Sound
+  const stopSound = (soundName) => {
+    if (!audioGunshot.current) return
+    if (!audioEnemyHit.current) return
+    if (!audioKill.current) return
+    if (!audioPlayerHit.current) return
+    if (!audioReload.current) return
+    if (!audioShieldHit.current) return
+
+    if (soundName == "gunshot") {
+      audioGunshot.current.currentTime = 0
+      audioGunshot.current.pause()
+    } else if (soundName == "shieldHit") {
+      audioEnemyHit.current.currentTime = 0
+      audioEnemyHit.current.pause()
+    } else if (soundName == "enemyHit") {
+      audioShieldHit.current.currentTime = 0
+      audioShieldHit.current.pause()
+    }
+  }
   
   useFrame((state, delta) => {
     if (drones.current == null) {
@@ -82,6 +139,7 @@ const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore
         backClick.current = [-1,-1]
       }
     }
+
   })
   
   return (
@@ -108,6 +166,8 @@ const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore
 
       <Road speed={speed} />
 
+      <BackgoundProps speed={speed} />
+
       <Player
         runners={runners}
         altSkin={altSkin}
@@ -117,6 +177,8 @@ const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore
         target={target}
         setMode={setMode}
         setMissionScore={setMissionScore}
+        playSound={playSound}
+        stopSound={stopSound}
       />
 
       { name == "front" && <>
@@ -127,8 +189,31 @@ const Scene = ({ isMobile, name, cam, setMode, runners, altSkin, setMissionScore
         <Drones
           timer={timer}
           target={target}
+          playSound={playSound}
         />
       </>}
+
+      <Html>
+        <audio ref={audioGunshot} >
+          <source src="./audio/gunshot.wav" type="audio/wav" />
+        </audio>
+        <audio ref={audioKill} >
+          <source src="./audio/kill.wav" type="audio/wav" />
+        </audio>
+        <audio ref={audioPlayerHit} >
+          <source src="./audio/playerHit.wav" type="audio/wav" />
+        </audio>
+        <audio ref={audioEnemyHit} >
+          <source src="./audio/enemyHit.wav" type="audio/wav" />
+        </audio>
+        <audio ref={audioReload} >
+          <source src="./audio/reload.wav" type="audio/wav" />
+        </audio>
+        <audio ref={audioShieldHit} >
+          <source src="./audio/shieldHit.wav" type="audio/wav" />
+        </audio>
+      </Html>
+
     </>
   )
 }

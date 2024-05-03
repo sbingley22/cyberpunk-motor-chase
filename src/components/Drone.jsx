@@ -5,7 +5,7 @@ import Props from "./Props"
 import { useFrame } from "@react-three/fiber"
 import { Cone } from "@react-three/drei"
 
-const Drone = ({ index, target, player }) => {
+const Drone = ({ index, target, player, playSound }) => {
   const ref = useRef()
   const coneRef = useRef()
 
@@ -84,7 +84,7 @@ const Drone = ({ index, target, player }) => {
     const shoot = () => {
       if (shooting.current) {
         // shooting
-        player.current.shield -= 1 * delta
+        player.current.shield -= 4 * delta
 
       } else {
         // Not currently shooting.
@@ -97,6 +97,8 @@ const Drone = ({ index, target, player }) => {
     shoot()
 
     const targeted = () => {
+      if (ref.current.health < 0) return
+
       shooting.current = false
 
       ref.current.health -= 20 * delta
@@ -105,7 +107,10 @@ const Drone = ({ index, target, player }) => {
       else if (health <66) coneRef.current.material.color.set(0.4,0.4,0.0)
       else coneRef.current.material.color.set(0.0,0.7,0.0)
 
-      if (health <= 0) target.current = null
+      if (health <= 0) {
+        target.current = null
+        playSound("kill")
+      }
     }
     const notTargeted = () => {
       if (shooting.current) coneRef.current.material.color.set(0,0,1.0)

@@ -20,7 +20,7 @@ const findNodeByName = (parent, name) => {
   return null
 }
 
-const Drones = ({ timer, target }) => {
+const Drones = ({ timer, target, playSound }) => {
   //console.log(drones)
   const group = useRef()
   const drones = useRef(null)
@@ -82,6 +82,7 @@ const Drones = ({ timer, target }) => {
           index={drone}
           target={target}
           player={player}
+          playSound={playSound}
         />
       )) }
     </group>
