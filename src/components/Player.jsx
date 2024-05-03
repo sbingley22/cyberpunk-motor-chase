@@ -157,13 +157,13 @@ const Player = ({ isMobile, runners, altSkin, cam, frontClick, timer, target, se
         </Html>
 
         <Plane 
-          position={isMobile ? [0,0.45,2] : [0,0.25,2]}
+          position={isMobile ? [0,0.55,1.8] : [0,0.25,2]}
           scale={[3,.5,1]}
           material-color={"#222222"}
         />
         <Plane 
           ref={shieldPlaneRef}
-          position={isMobile ? [0,0.45,2.1] : [0,0.25,2.1]}
+          position={isMobile ? [0,0.55,1.85] : [0,0.25,2.1]}
           scale={[3,.5,1]}
           material-color={"#222299"}
         />
