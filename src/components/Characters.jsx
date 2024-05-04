@@ -8,9 +8,9 @@ import { useFrame } from '@react-three/fiber'
 
 const characterNodes = [
   ["Adam", "LowTopo_Cube002", "LowTopo_Cube002_1", "LowTopo_Cube002_2", "CyberHiTops", "Jacket", "Mowhawk", "MotorCycle", "Pistol"],
-  ["Ana", "LowTopo_Cube001", "LowTopo_Cube001_1", "MotorCycle", "Pistol", "Parted"],
+  ["Ana", "LowTopo_Cube001", "LowTopo_Cube001_1", "MotorCycle", "Pistol", "Parted", "JacketLucy", "LowTopo_Cube004", "LowTopo_Cube004_1"],
   ["Ana", "LowTopo_Cube001", "LowTopo_Cube001_1", "CyberHiTops", "CyberCannon", "Cube003", "Cube003_1", "CyberArms", "MotorCycle", "JacketRebbeca", "PigTails"],
-  ["AnaGen", "MotorCycle", "Pistol", "Parted"],
+  ["AnaGen", "MotorCycle", "Pistol", "Parted", "JacketLucy"],
   ["AnaGen", "CyberHiTops", "CyberCannon", "Cube003", "Cube003_1", "CyberArms", "MotorCycle", "JacketRebbecaShort", "PigTails"],
   ["MotorCycle", "Merc1", "Pistol"],
   ["MotorCycle", "Merc2", "Pistol"]
